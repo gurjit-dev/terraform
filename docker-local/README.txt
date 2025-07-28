@@ -28,4 +28,4 @@ local-docker-terraform/
 
 Feel free to reach out with questions, suggestions, or collaborations:
 
-**Email**: [gurjit.singh.sre@gmail.com
+**Email**: gurjit.singh.sre@gmail.com
