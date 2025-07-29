@@ -1,4 +1,12 @@
 terraform {
+  cloud {
+    organization = "gurjit-singh"
+
+    workspaces {
+      project = "Learn Terraform"
+      name    = "aws"
+    }
+  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
