@@ -46,7 +46,7 @@ resource "aws_security_group" "private_sg" {
 resource "aws_instance" "bastion_vm" {
   ami                    = var.ami
   instance_type          = var.instance_type
-  subnet_id              = var.subnet_id
+  subnet_id              = var.public_subnet_id
   key_name               = "gurjit-ed25519"
   vpc_security_group_ids = [aws_security_group.bastion_sg.id]
 
@@ -60,7 +60,7 @@ resource "aws_instance" "bastion_vm" {
 resource "aws_instance" "ansible_vm" {
   ami                    = var.ami
   instance_type          = var.instance_type
-  subnet_id              = var.subnet_id
+  subnet_id              = var.private_subnet_id
   vpc_security_group_ids = [aws_security_group.private_sg.id] # reuse the same SG
   key_name               = var.key_name
 

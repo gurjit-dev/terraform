@@ -13,5 +13,3 @@ output "ansible_instance_id" {
 output "ansible_private_ip" {
   value = aws_instance.ansible_vm.private_ip
 }
-
-
