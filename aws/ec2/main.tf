@@ -44,7 +44,7 @@ resource "aws_security_group" "private_sg" {
 
 
 resource "aws_instance" "bastion_vm" {
-  ami                    = var.ami
+  ami                    = "ami-054b7fc3c333ac6d2"
   instance_type          = var.instance_type
   subnet_id              = var.public_subnet_id
   key_name               = "gurjit-ed25519"
@@ -78,16 +78,42 @@ resource "aws_instance" "bastion_vm" {
 
 resource "aws_instance" "ansible_vm" {
   ami                    = var.ami
-  instance_type          = var.instance_type
-  subnet_id              = var.private_subnet_id
-  vpc_security_group_ids = [aws_security_group.private_sg.id] # reuse the same SG
+  instance_type          = "t2.medium"
+  subnet_id              = var.public_subnet_id
+  vpc_security_group_ids = [aws_security_group.bastion_sg.id] # reuse the same SG
   key_name               = var.key_name
 
-  associate_public_ip_address = false # Ansible VM is private
+  root_block_device {
+    volume_size           = 20
+    volume_type           = "gp3"
+    delete_on_termination = true
+  }
+
+  user_data = file("${path.module}/../scripts/install_ansible.sh")
 
   tags = {
     Name = "ansible"
     Env  = "dev"
     Role = "automation"
+  }
+}
+
+resource "aws_instance" "jenkins" {
+  ami                    = var.ami
+  instance_type          = "t2.medium"
+  subnet_id              = var.public_subnet_id
+  vpc_security_group_ids = [aws_security_group.bastion_sg.id]
+  key_name               = var.key_name
+
+  root_block_device {
+    volume_size           = 50
+    volume_type           = "gp3"
+    delete_on_termination = true
+  }
+
+  tags = {
+    Name = "jenkins"
+    env  = "dev"
+    Role = "cicd"
   }
 }
