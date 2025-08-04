@@ -34,6 +34,15 @@ resource "aws_security_group" "private_sg" {
     security_groups = [aws_security_group.bastion_sg.id]
   }
 
+  # SSH between nodes in same SG (Ansible <-> Jenkins)
+  ingress {
+    description = "Allow SSH between nodes in same SG"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    self        = true
+  }
+
   # Allow all TCP traffic between nodes in same SG
   ingress {
     description = "Allow access to Jenkins UI"
