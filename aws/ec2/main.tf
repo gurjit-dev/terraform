@@ -20,12 +20,12 @@ resource "aws_security_group" "bastion_sg" {
   }
 }
 
-# Private SG: Allow SSH only from Bastion
 resource "aws_security_group" "private_sg" {
   name        = var.private_sg_name
-  description = "Allow SSH from Bastion only"
+  description = "Allow internal node communication + SSH from Bastion"
   vpc_id      = var.vpc_id
 
+  # SSH from Bastion
   ingress {
     description     = "SSH from Bastion SG"
     from_port       = 22
@@ -34,6 +34,25 @@ resource "aws_security_group" "private_sg" {
     security_groups = [aws_security_group.bastion_sg.id]
   }
 
+  # Allow all TCP traffic between nodes in same SG
+  ingress {
+    description = "Allow access to Jenkins UI"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # ⚠️ open to all — restrict in production
+  }
+
+  # Allow ICMP (ping) from self
+  ingress {
+    description = "Allow ping (ICMP) from self"
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    self        = true
+  }
+
+  # Egress: allow all
   egress {
     from_port   = 0
     to_port     = 0
@@ -80,7 +99,7 @@ resource "aws_instance" "ansible_vm" {
   ami                    = var.ami
   instance_type          = "t2.medium"
   subnet_id              = var.public_subnet_id
-  vpc_security_group_ids = [aws_security_group.bastion_sg.id] # reuse the same SG
+  vpc_security_group_ids = [aws_security_group.private_sg.id]
   key_name               = var.key_name
 
   root_block_device {
@@ -102,7 +121,7 @@ resource "aws_instance" "jenkins" {
   ami                    = var.ami
   instance_type          = "t2.medium"
   subnet_id              = var.public_subnet_id
-  vpc_security_group_ids = [aws_security_group.bastion_sg.id]
+  vpc_security_group_ids = [aws_security_group.private_sg.id]
   key_name               = var.key_name
 
   root_block_device {
