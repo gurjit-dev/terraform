@@ -40,7 +40,23 @@ resource "aws_security_group" "private_sg" {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # ⚠️ open to all — restrict in production
+    cidr_blocks = ["0.0.0.0/0"] # ⚠️ open to all — restrict in production
+  }
+
+  ingress {
+    description = "Allow SSH between nodes in same SG"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    self        = true
+  }
+
+  ingress {
+    description = "Allow HTTP ingress"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   # Allow ICMP (ping) from self
