@@ -86,6 +86,14 @@ resource "aws_security_group" "private_sg" {
   }
 }
 
+# Bastion EIP
+resource "aws_eip" "bastion_eip" {
+  instance = aws_instance.bastion_vm.id
+
+  tags = {
+    Name = "bastion-eip"
+  }
+}
 
 resource "aws_instance" "bastion_vm" {
   ami                    = "ami-054b7fc3c333ac6d2"
@@ -95,23 +103,7 @@ resource "aws_instance" "bastion_vm" {
   vpc_security_group_ids = [aws_security_group.bastion_sg.id]
   iam_instance_profile   = "bastion-ssm-profile"
 
-  user_data = <<-EOF
-              #!/bin/bash
-              mkdir -p /home/ec2-user/.ssh
-
-              for i in {1..5}; do
-                aws ssm get-parameter \
-                  --name "/infra/infra-ssh-key" \
-                  --with-decryption \
-                  --region us-west-2 \
-                  --query "Parameter.Value" \
-                  --output text > /home/ec2-user/.ssh/infra-ssh-key.pem && break
-                sleep 5
-              done
-
-              chown ec2-user:ec2-user /home/ec2-user/.ssh/infra-ssh-key.pem
-              chmod 600 /home/ec2-user/.ssh/infra-ssh-key.pem
-              EOF
+  user_data = file("${path.module}/../scripts/bastion_ssh_config.sh")
 
   tags = {
     Name = "bastion"
