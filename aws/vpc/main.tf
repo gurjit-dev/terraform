@@ -54,3 +54,15 @@ resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public.id
   route_table_id = aws_route_table.public.id
 }
+
+resource "aws_subnet" "eks_private" {
+  count = length(var.eks_azs)
+
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = cidrsubnet("10.0.100.0/22", 2, count.index)
+  availability_zone       = var.eks_azs[count.index]
+  map_public_ip_on_launch = false
+  tags = {
+    Name = "eks-private-${var.eks_azs[count.index]}"
+  }
+}
