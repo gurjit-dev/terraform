@@ -98,12 +98,14 @@ resource "aws_eip" "bastion_eip" {
 }
 
 resource "aws_instance" "bastion_vm" {
-  ami                    = "ami-054b7fc3c333ac6d2"
-  instance_type          = var.instance_type
-  subnet_id              = var.public_subnet_id
-  key_name               = "gurjit-ed25519"
-  vpc_security_group_ids = [aws_security_group.bastion_sg.id]
-  iam_instance_profile   = "bastion-ssm-profile"
+  ami                                  = "ami-054b7fc3c333ac6d2"
+  instance_type                        = var.instance_type
+  subnet_id                            = var.public_subnet_id
+  key_name                             = "gurjit-ed25519"
+  vpc_security_group_ids               = [aws_security_group.bastion_sg.id]
+  iam_instance_profile                 = "bastion-ssm-profile"
+  disable_api_termination              = true
+  instance_initiated_shutdown_behavior = "stop"
 
   user_data = file("${path.module}/../scripts/bastion_ssh_config.sh")
 
@@ -126,12 +128,15 @@ resource "aws_eip" "ansible_eip" {
 }
 
 resource "aws_instance" "ansible_vm" {
-  ami                    = var.ami
-  instance_type          = "t2.medium"
-  subnet_id              = var.public_subnet_id
-  vpc_security_group_ids = [aws_security_group.private_sg.id]
-  key_name               = var.key_name
-  private_ip             = "10.0.1.82"
+  ami                                  = var.ami
+  instance_type                        = "t2.medium"
+  subnet_id                            = var.public_subnet_id
+  vpc_security_group_ids               = [aws_security_group.private_sg.id]
+  key_name                             = var.key_name
+  private_ip                           = "10.0.1.82"
+  disable_api_termination              = true
+  instance_initiated_shutdown_behavior = "stop"
+
   root_block_device {
     volume_size           = 20
     volume_type           = "gp3"
@@ -159,12 +164,14 @@ resource "aws_eip" "jenkins_eip" {
 }
 
 resource "aws_instance" "jenkins" {
-  ami                    = var.ami
-  instance_type          = "t2.medium"
-  subnet_id              = var.public_subnet_id
-  vpc_security_group_ids = [aws_security_group.private_sg.id]
-  key_name               = var.key_name
-  private_ip             = "10.0.1.130"
+  ami                                  = var.ami
+  instance_type                        = "t2.medium"
+  subnet_id                            = var.public_subnet_id
+  vpc_security_group_ids               = [aws_security_group.private_sg.id]
+  key_name                             = var.key_name
+  private_ip                           = "10.0.1.130"
+  disable_api_termination              = true
+  instance_initiated_shutdown_behavior = "stop"
 
   root_block_device {
     volume_size           = 50
