@@ -17,17 +17,15 @@ retry apt install -y ansible git curl unzip python3-pip
 
 # Create working directory
 mkdir -p /opt
-sudo chown ubuntu:ubuntu /opt/ -R
 sudo git clone https://github.com/gurjit-dev/ansible.git /opt/ansible
+sudo chown ubuntu:ubuntu /opt/ansible -R
 
 # Write SSH config
-chown ubuntu:ubuntu /home/ubuntu/.ssh/ -R
 touch /home/ubuntu/.ssh/ansible_key
 cat <<EOF > /home/ubuntu/.ssh/config
 Host *
   IdentityFile ~/.ssh/ansible_key
-  IdentitiesOnly yes
   User ubuntu
 EOF
 
-
+sudo chown ubuntu:ubuntu /home/ubuntu/.ssh/ -R
