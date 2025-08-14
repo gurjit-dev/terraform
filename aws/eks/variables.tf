@@ -7,7 +7,7 @@ variable "name" {
 variable "kubernetes_version" {
   description = "Kubernetes version"
   type        = string
-  default     = "1.29"
+  default     = "1.33"
 }
 
 variable "vpc_id" {
@@ -18,4 +18,9 @@ variable "vpc_id" {
 variable "eks_private_subnet_ids" {
   description = "List of private subnet IDs for EKS"
   type        = list(string)
+}
+
+variable "region" {
+  description = "AWS region where resources will be created"
+  type        = string
 }
