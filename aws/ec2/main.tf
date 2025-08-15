@@ -165,7 +165,7 @@ resource "aws_eip" "jenkins_eip" {
 
 resource "aws_instance" "jenkins" {
   ami                                  = var.ami
-  instance_type                        = "t2.medium"
+  instance_type                        = "t3.medium"
   subnet_id                            = var.public_subnet_id
   vpc_security_group_ids               = [aws_security_group.private_sg.id]
   key_name                             = var.key_name
@@ -180,8 +180,36 @@ resource "aws_instance" "jenkins" {
   }
 
   tags = {
-    Name = "jenkins"
-    env  = "dev"
-    Role = "cicd"
+    Name        = "jenkins"
+    Environment = "dev"
+    Role        = "DevOps"
+    Project     = "CI/CD"
+  }
+}
+
+resource "aws_instance" "jenkins-agent-build-01" {
+  ami                                  = var.ami
+  instance_type                        = "t3.medium"
+  subnet_id                            = var.public_subnet_id
+  vpc_security_group_ids               = [aws_security_group.private_sg.id]
+  key_name                             = var.key_name
+  private_ip                           = "10.0.1.131"
+  disable_api_termination              = true
+  instance_initiated_shutdown_behavior = "stop"
+
+  root_block_device {
+    volume_size           = 100
+    volume_type           = "gp3"
+    delete_on_termination = true
+  }
+
+  user_data = file("${path.module}/../scripts/jenkins-agent-base.sh")
+
+  tags = {
+    Name        = "jenkins-agent-build-01"
+    Environment = "dev"
+    Role        = "jenkins-agent"
+    Owner       = "DevOps"
+    Project     = "CICD"
   }
 }
