@@ -230,7 +230,7 @@ resource "aws_instance" "jenkins-agent-01" {
     delete_on_termination = true
   }
 
-  #user_data = file("${path.module}/../scripts/jenkins-agent-base.sh")
+  user_data = file("${path.module}/../scripts/base_debian.sh")
 
   tags = {
     Name        = "jenkins-agent-build-01"
