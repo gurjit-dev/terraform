@@ -189,7 +189,7 @@ resource "aws_instance" "jenkins" {
 
 resource "aws_instance" "jenkins-agent-build-01" {
   ami                                  = var.ami
-  instance_type                        = "t3.medium"
+  instance_type                        = "t3.micro"
   subnet_id                            = var.public_subnet_id
   vpc_security_group_ids               = [aws_security_group.private_sg.id]
   key_name                             = var.key_name
@@ -203,7 +203,34 @@ resource "aws_instance" "jenkins-agent-build-01" {
     delete_on_termination = true
   }
 
-  user_data = file("${path.module}/../scripts/jenkins-agent-base.sh")
+  #user_data = file("${path.module}/../scripts/jenkins-agent-base.sh")
+
+  tags = {
+    Name        = "jenkins-agent-build-01"
+    Environment = "dev"
+    Role        = "jenkins-agent"
+    Owner       = "DevOps"
+    Project     = "CICD"
+  }
+}
+
+resource "aws_instance" "jenkins-agent-01" {
+  ami                                  = var.ami
+  instance_type                        = "t3.micro"
+  subnet_id                            = var.public_subnet_id
+  vpc_security_group_ids               = [aws_security_group.private_sg.id]
+  key_name                             = var.key_name
+  private_ip                           = "10.0.1.132"
+  disable_api_termination              = true
+  instance_initiated_shutdown_behavior = "stop"
+
+  root_block_device {
+    volume_size           = 100
+    volume_type           = "gp3"
+    delete_on_termination = true
+  }
+
+  #user_data = file("${path.module}/../scripts/jenkins-agent-base.sh")
 
   tags = {
     Name        = "jenkins-agent-build-01"
