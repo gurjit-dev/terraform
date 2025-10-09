@@ -213,3 +213,30 @@ resource "aws_instance" "jenkins-agent-01" {
     Project     = "CICD"
   }
 }
+
+resource "aws_instance" "cicd-sanbox-vm" {
+  ami                                  = var.ami
+  instance_type                        = "t3.medium"
+  subnet_id                            = var.public_subnet_id
+  vpc_security_group_ids               = [aws_security_group.private_sg.id]
+  key_name                             = var.key_name
+  private_ip                           = "10.0.1.131"
+  disable_api_termination              = true
+  instance_initiated_shutdown_behavior = "stop"
+
+  root_block_device {
+    volume_size           = 100
+    volume_type           = "gp3"
+    delete_on_termination = true
+  }
+
+  user_data = file("${path.module}/../scripts/base_debian.sh")
+
+  tags = {
+    Name        = "cicd-sandbox"
+    Environment = "dev"
+    Role        = "test"
+    Owner       = "DevOps"
+    Project     = "CICD"
+  }
+}
