@@ -174,7 +174,7 @@ resource "aws_instance" "jenkins" {
   instance_initiated_shutdown_behavior = "stop"
 
   root_block_device {
-    volume_size           = 50
+    volume_size           = 20
     volume_type           = "gp3"
     delete_on_termination = true
   }
@@ -198,7 +198,7 @@ resource "aws_instance" "jenkins-agent-01" {
   instance_initiated_shutdown_behavior = "stop"
 
   root_block_device {
-    volume_size           = 100
+    volume_size           = 20
     volume_type           = "gp3"
     delete_on_termination = true
   }
@@ -225,7 +225,7 @@ resource "aws_instance" "cicd-sanbox-vm" {
   instance_initiated_shutdown_behavior = "stop"
 
   root_block_device {
-    volume_size           = 100
+    volume_size           = 20
     volume_type           = "gp3"
     delete_on_termination = true
   }
