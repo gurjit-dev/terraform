@@ -90,7 +90,7 @@ resource "aws_security_group" "private_sg" {
 resource "aws_eip" "bastion_eip" {
   instance = aws_instance.bastion_vm.id
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
   tags = {
     Name = "bastion-eip"
@@ -120,7 +120,7 @@ resource "aws_instance" "bastion_vm" {
 resource "aws_eip" "ansible_eip" {
   instance = aws_instance.ansible_vm.id
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
   tags = {
     Name = "ansible-eip"
@@ -134,7 +134,7 @@ resource "aws_instance" "ansible_vm" {
   vpc_security_group_ids               = [aws_security_group.private_sg.id]
   key_name                             = var.key_name
   private_ip                           = "10.0.1.82"
-  disable_api_termination              = true
+  disable_api_termination              = false
   instance_initiated_shutdown_behavior = "stop"
 
   root_block_device {
@@ -156,7 +156,7 @@ resource "aws_instance" "ansible_vm" {
 resource "aws_eip" "jenkins_eip" {
   instance = aws_instance.jenkins.id
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
   tags = {
     Name = "jenkins-eip"
