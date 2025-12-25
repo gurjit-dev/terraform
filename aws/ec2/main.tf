@@ -87,15 +87,15 @@ resource "aws_security_group" "private_sg" {
 }
 
 # Bastion EIP
-resource "aws_eip" "bastion_eip" {
-  instance = aws_instance.bastion_vm.id
-  lifecycle {
-    prevent_destroy = false
-  }
-  tags = {
-    Name = "bastion-eip"
-  }
-}
+# resource "aws_eip" "bastion_eip" {
+#   instance = aws_instance.bastion_vm.id
+#   lifecycle {
+#     prevent_destroy = false
+#   }
+#   tags = {
+#     Name = "bastion-eip"
+#   }
+# }
 
 resource "aws_instance" "bastion_vm" {
   ami                                  = "ami-054b7fc3c333ac6d2"
@@ -116,16 +116,16 @@ resource "aws_instance" "bastion_vm" {
   }
 }
 
-# Ansible EIP
-resource "aws_eip" "ansible_eip" {
-  instance = aws_instance.ansible_vm.id
-  lifecycle {
-    prevent_destroy = false
-  }
-  tags = {
-    Name = "ansible-eip"
-  }
-}
+# # Ansible EIP
+# resource "aws_eip" "ansible_eip" {
+#   instance = aws_instance.ansible_vm.id
+#   lifecycle {
+#     prevent_destroy = false
+#   }
+#   tags = {
+#     Name = "ansible-eip"
+#   }
+# }
 
 resource "aws_instance" "ansible_vm" {
   ami                                  = var.ami
@@ -153,15 +153,15 @@ resource "aws_instance" "ansible_vm" {
 }
 
 # Jenkins EIP
-resource "aws_eip" "jenkins_eip" {
-  instance = aws_instance.jenkins.id
-  lifecycle {
-    prevent_destroy = false
-  }
-  tags = {
-    Name = "jenkins-eip"
-  }
-}
+# resource "aws_eip" "jenkins_eip" {
+#   instance = aws_instance.jenkins.id
+#   lifecycle {
+#     prevent_destroy = false
+#   }
+#   tags = {
+#     Name = "jenkins-eip"
+#   }
+# }
 
 resource "aws_instance" "jenkins" {
   ami                                  = var.ami
