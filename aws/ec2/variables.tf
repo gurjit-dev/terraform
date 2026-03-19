@@ -35,11 +35,6 @@ variable "private_sg_name" {
   default = "private-sg"
 }
 
-variable "private_subnet_id" {
-  description = "The ID of the private subnet"
-  type        = string
-}
-
 variable "public_subnet_id" {
   description = "The ID of the public subnet"
   type        = string
