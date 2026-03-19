@@ -1,0 +1,14 @@
+# Example Terraform variables file
+# Copy this file to terraform.tfvars and update values
+
+# AMI ID for EC2 instances
+ami = "ami-xxxxxxxxxxxxxxxxx"
+
+# SSH key pair name
+key_name = "your-key-name"
+
+# Existing VPC ID
+vpc_id = "vpc-xxxxxxxx"
+
+# Public subnet ID
+public_subnet_id = "subnet-xxxxxxxx"
