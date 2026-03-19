@@ -35,3 +35,42 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# New 
+# Mac OS
+.DS_Store
+
+# Logs
+*.log
+
+# Secrets / keys
+*.pem
+*.key
+*.pub
+
+# Env files
+.env
+.env.*
+
+# SSH / local configs
+id_rsa
+id_rsa.pub
+
+# Terraform plan output
+*.tfplan
+
+# IDE / editor
+.vscode/
+.idea/
+
+# Python (since you are learning + will use later)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ansible temp files (future use)
+.retry
+
+# AWS CLI cache
+.aws/
